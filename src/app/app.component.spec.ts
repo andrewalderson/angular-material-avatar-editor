@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
-describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
-  });
+import { render, screen } from '@testing-library/angular';
+import { Primary } from './app.component.stories';
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+describe('AppComponent', () => {
+  it('should create the app', async () => {
+    await render(AppComponent, {
+      componentProperties: Primary.args,
+    });
+
+    const textContent = await screen.findByText('App works!');
+
+    expect(textContent).toBeInTheDocument();
   });
 });
