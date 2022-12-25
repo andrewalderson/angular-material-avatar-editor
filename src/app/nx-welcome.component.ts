@@ -3,7 +3,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 /* eslint-disable */
 
 @Component({
-  selector: 'angular-material-avatar-editor-nx-welcome',
+  selector: 'matx-nx-welcome',
   template: `
     <!--
      * * * * * * * * * * * * * * * * * * * * * * * * * * * *

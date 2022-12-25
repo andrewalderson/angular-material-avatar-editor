@@ -15,7 +15,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "angularMaterialAvatarEditor",
+            "prefix": "matx",
             "style": "camelCase"
           }
         ],
@@ -23,7 +23,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "angular-material-avatar-editor",
+            "prefix": "matx",
             "style": "kebab-case"
           }
         ]
