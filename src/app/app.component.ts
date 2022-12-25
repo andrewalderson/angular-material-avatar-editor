@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'matx-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  template: '<p>App works!</p>',
+  styles: [],
 })
-export class AppComponent {
-  title = 'angular-material-avatar-editor';
-}
+export class AppComponent {}
