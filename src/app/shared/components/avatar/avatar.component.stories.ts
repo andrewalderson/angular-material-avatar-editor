@@ -1,4 +1,4 @@
-import { moduleMetadata, Story, Meta } from '@storybook/angular';
+import { moduleMetadata, Story, Meta, componentWrapperDecorator } from '@storybook/angular';
 import { AvatarComponent } from './avatar.component';
 
 export default {
@@ -7,7 +7,10 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [],
-    })
+    }),
+    componentWrapperDecorator(
+      (story) => `<div style="width:'96px';height:'96px'">${story}</div>`
+    ),
   ],
 } as Meta<AvatarComponent>;
 

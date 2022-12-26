@@ -14,4 +14,14 @@ describe('AvatarComponent', () => {
 
     expect(avatar).toHaveClass('matx-avatar');
   });
+
+  it('should render the an icon by default', async () => {
+    await render(AvatarComponent, {
+      componentProperties: Default.args,
+    });
+
+    const icon = document.querySelector('svg.matx-avatar__default-icon');
+
+    expect(icon).toBeInTheDocument();
+  });
 });
