@@ -1,8 +1,17 @@
+<div
+  *ngIf="initials"
+  class="matx-avatar__initials"
+  data-testid="matx-avatar-initials"
+>
+  {{ initials }}
+</div>
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 128 128"
   class="matx-avatar__default-icon"
+  data-testid="matx-avatar-default-icon"
   fill="currentColor"
+  *ngIf="!initials"
 >
   <path
     fill="currentColor"

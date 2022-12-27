@@ -34,6 +34,7 @@ $angular-material-avatar-editor-theme: mat.define-light-theme(
       accent: $angular-material-avatar-editor-accent,
       warn: $angular-material-avatar-editor-warn,
     ),
+    typography: mat.define-typography-config(),
   )
 );
 

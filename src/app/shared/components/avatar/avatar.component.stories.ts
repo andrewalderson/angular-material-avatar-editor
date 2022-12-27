@@ -1,4 +1,10 @@
-import { moduleMetadata, Story, Meta, componentWrapperDecorator } from '@storybook/angular';
+import { faker } from '@faker-js/faker';
+import {
+  componentWrapperDecorator,
+  Meta,
+  moduleMetadata,
+  Story,
+} from '@storybook/angular';
 import { AvatarComponent } from './avatar.component';
 
 export default {
@@ -18,7 +24,11 @@ const Template: Story<AvatarComponent> = (args: AvatarComponent) => ({
   props: args,
 });
 
-
 export const Default = Template.bind({});
-Default.args = {
-}
+Default.args = {};
+
+export const WithInitials = Template.bind({});
+WithInitials.args = {
+  name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  username: faker.internet.userName(),
+};

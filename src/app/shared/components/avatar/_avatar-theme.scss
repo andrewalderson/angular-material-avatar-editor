@@ -8,7 +8,7 @@
   $foreground: map.get($config, foreground);
   $background: map.get($config, background);
 
-  .matx-avatar {
+  .matx-avatar-with-icon {
     color: mat.get-color-from-palette($foreground, icon);
     background-color: mat.get-color-from-palette($background, background);
   }
@@ -20,6 +20,12 @@
 
 @mixin typography($config-or-theme) {
   $config: mat.get-typography-config($config-or-theme);
+  .matx-avatar-with-initials {
+    font: {
+      family: mat.font-family($config);
+      weight: mat.font-weight($config, button);
+    }
+  }
 }
 
 @mixin theme($theme) {
