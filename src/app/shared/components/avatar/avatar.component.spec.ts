@@ -1,4 +1,4 @@
-import { render } from '@testing-library/angular';
+import { fireEvent, render } from '@testing-library/angular';
 import {
   MATX_AVATAR_INITIALS_COLOR_FUNCTION,
   MATX_AVATAR_INITIALS_FUNCTION,
@@ -6,7 +6,11 @@ import {
 
 import { faker } from '@faker-js/faker';
 import { AvatarComponent } from './avatar.component';
-import { Default, WithInitials } from './avatar.component.stories';
+import { Default, WithImage, WithInitials } from './avatar.component.stories';
+
+const ICON_TESTID = 'matx-avatar-default-icon';
+const INITIALS_TESTID = 'matx-avatar-initials';
+const IMAGE_TESTID = 'matx-avatar-image';
 
 describe('AvatarComponent', () => {
   it('should add a class matching the selector to the host element by default', async () => {
@@ -32,12 +36,20 @@ describe('AvatarComponent', () => {
     expect(container).toHaveClass('matx-avatar-with-initials');
   });
 
+  it("should add the 'matx-avatar-with-image' class to the host element when the image are rendered", async () => {
+    const { container } = await render(AvatarComponent, {
+      componentProperties: WithImage.args,
+    });
+
+    expect(container).toHaveClass('matx-avatar-with-image');
+  });
+
   it('should render the icon by default', async () => {
     const { findByTestId } = await render(AvatarComponent, {
       componentProperties: Default.args,
     });
 
-    const iconElement = await findByTestId('matx-avatar-default-icon');
+    const iconElement = await findByTestId(ICON_TESTID);
 
     expect(iconElement).toBeInTheDocument();
   });
@@ -55,7 +67,7 @@ describe('AvatarComponent', () => {
         componentInputs: { name },
       });
 
-      const initialsElement = await findByTestId('matx-avatar-initials');
+      const initialsElement = await findByTestId(INITIALS_TESTID);
 
       expect(initialsElement).toHaveTextContent(initials);
     }
@@ -73,7 +85,7 @@ describe('AvatarComponent', () => {
       ],
     });
 
-    const iconElement = queryByTestId('matx-avatar-default-icon');
+    const iconElement = queryByTestId(ICON_TESTID);
 
     expect(iconElement).not.toBeInTheDocument();
   });
@@ -89,7 +101,7 @@ describe('AvatarComponent', () => {
       ],
     });
 
-    const initialsElement = queryByTestId('matx-avatar-initials');
+    const initialsElement = queryByTestId(INITIALS_TESTID);
 
     expect(initialsElement).not.toBeInTheDocument();
   });
@@ -172,5 +184,75 @@ describe('AvatarComponent', () => {
 
     expect(container).not.toHaveStyle(`color:${foreground}`);
     expect(container).not.toHaveStyle(`background:${background}`);
+  });
+
+  it('should render an image when a src is supplied and the image does not emit an error', async () => {
+    const { findByTestId } = await render(AvatarComponent, {
+      componentProperties: WithImage.args,
+    });
+
+    const imageElement = await findByTestId(IMAGE_TESTID);
+
+    expect(imageElement).toBeInTheDocument();
+  });
+
+  it('should not render an image when an src is supplied and the image emits an error', async () => {
+    const { findByTestId } = await render(AvatarComponent, {
+      componentProperties: WithImage.args,
+    });
+
+    const imageElement = await findByTestId(IMAGE_TESTID);
+    fireEvent.error(imageElement);
+
+    expect(imageElement).not.toBeInTheDocument();
+  });
+
+  it('should not render an icon when a src is supplied and the image does not emit an error', async () => {
+    const { queryByTestId } = await render(AvatarComponent, {
+      componentProperties: WithImage.args,
+    });
+
+    const iconElement = queryByTestId(ICON_TESTID);
+
+    expect(iconElement).not.toBeInTheDocument();
+  });
+
+  it('should render an icon when an src is supplied and a name is not supplied and the image emits an error', async () => {
+    const { findByTestId } = await render(AvatarComponent, {
+      componentProperties: WithImage.args,
+    });
+
+    const imageElement = await findByTestId(IMAGE_TESTID);
+    fireEvent.error(imageElement);
+
+    const iconElement = await findByTestId(ICON_TESTID);
+
+    expect(iconElement).toBeInTheDocument();
+  });
+
+  it('should not render the initials when a src and name are supplied and the image does not emit an error', async () => {
+    const { queryByTestId } = await render(AvatarComponent, {
+      componentProperties: { ...WithImage.args, ...WithInitials.args },
+    });
+
+    const initialsElement = queryByTestId(INITIALS_TESTID);
+
+    expect(initialsElement).not.toBeInTheDocument();
+  });
+
+  it('should render the initials when a src and name are supplied and the image emits an error', async () => {
+    const { findByTestId } = await render(AvatarComponent, {
+      componentProperties: {
+        ...WithImage.args,
+        ...WithInitials.args,
+      },
+    });
+
+    const imageElement = await findByTestId(IMAGE_TESTID);
+    fireEvent.error(imageElement);
+
+    const initialsElement = await findByTestId(INITIALS_TESTID);
+
+    expect(initialsElement).toBeInTheDocument();
   });
 });

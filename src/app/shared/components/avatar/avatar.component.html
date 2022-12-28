@@ -1,5 +1,12 @@
+<img
+  *ngIf="mode === 'image'"
+  class="matx-avatar__image"
+  data-testid="matx-avatar-image"
+  [src]="src"
+  (error)="_srcError()"
+/>
 <div
-  *ngIf="initials"
+  *ngIf="mode === 'initials'"
   class="matx-avatar__initials"
   data-testid="matx-avatar-initials"
 >
@@ -11,7 +18,7 @@
   class="matx-avatar__default-icon"
   data-testid="matx-avatar-default-icon"
   fill="currentColor"
-  *ngIf="!initials"
+  *ngIf="mode === 'icon'"
 >
   <path
     fill="currentColor"

@@ -28,14 +28,17 @@ export class AvatarComponent implements OnChanges {
     return 'matx-avatar';
   }
   @HostBinding('class.matx-avatar-with-icon') get iconClass() {
-    return !this.#initials;
+    return this.#mode === 'icon';
   }
   @HostBinding('class.matx-avatar-with-initials') get initialsClass() {
-    return !!this.#initials;
+    return this.#mode === 'initials';
+  }
+  @HostBinding('class.matx-avatar-with-image') get imageClass() {
+    return this.#mode === 'image';
   }
 
   @HostBinding('style.font-size.px') get fontSizeStyle() {
-    return this.#initials ? this.getFontSize() : null;
+    return this.#mode === 'initials' ? this.getFontSize() : null;
   }
 
   @HostBinding('style.color') get color() {
@@ -56,6 +59,8 @@ export class AvatarComponent implements OnChanges {
 
   @Input() fontSizeRatio = 0.45;
 
+  @Input() src?: string;
+
   get initials() {
     return this.#initials;
   }
@@ -66,7 +71,23 @@ export class AvatarComponent implements OnChanges {
   }
   #colors?: { background: string; foreground: string } | null;
 
+  get mode() {
+    return this.#mode;
+  }
+  #mode?: 'icon' | 'initials' | 'image' = 'icon';
+
   ngOnChanges() {
+    if (this.src) {
+      this.#mode = 'image';
+    } else if (this.name) {
+      this.setInitials();
+      this.#mode = this.#initials ? 'initials' : 'icon';
+    } else {
+      this.#mode = 'icon';
+    }
+  }
+
+  private setInitials() {
     this.#initials = null;
     this.#colors = null;
     if (this.name) {
@@ -80,5 +101,10 @@ export class AvatarComponent implements OnChanges {
   private getFontSize() {
     const height = this.#elementRef.nativeElement.clientHeight;
     return Math.floor(height * this.fontSizeRatio);
+  }
+
+  _srcError() {
+    this.setInitials();
+    this.#mode = this.#initials ? 'initials' : 'icon';
   }
 }

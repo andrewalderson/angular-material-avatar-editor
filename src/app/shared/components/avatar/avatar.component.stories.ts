@@ -32,3 +32,8 @@ WithInitials.args = {
   name: `${faker.name.firstName()} ${faker.name.lastName()}`,
   username: faker.internet.userName(),
 };
+
+export const WithImage = Template.bind({});
+WithImage.args = {
+  src: faker.internet.avatar(),
+};

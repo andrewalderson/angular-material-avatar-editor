@@ -8,10 +8,15 @@
   align-items: center;
   justify-content: center;
 
-  &__default-icon {
+  &__default-icon,
+  &__image {
     position: absolute;
     width: 100%;
     height: 100%;
     inset: 0px;
+  }
+
+  &__image {
+    object-fit: cover;
   }
 }
