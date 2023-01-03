@@ -13,4 +13,10 @@ describe('angular-material-avatar-editor', () => {
       cy.get('matx-avatar').should('exist');
     });
   });
+  describe('image state', () => {
+    beforeEach(() => cy.visit('/iframe.html?id=avatarcomponent--with-image'));
+    it('should render the component', () => {
+      cy.get('matx-avatar').should('exist');
+    });
+  });
 });
