@@ -1,1 +1,5 @@
-<p>profile-picture works!</p>
+<matx-avatar
+  *ngIf="_userProfileService.profile$ | async as profile"
+  [name]="profile.name"
+  [src]="profile.picture"
+></matx-avatar>
