@@ -5,7 +5,11 @@ import {
   HostListener,
   inject,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { ProfilePictureComponent } from './profile-picture.component';
 
 @Component({
   selector: 'button[matx-profile-picture-dialog-trigger]',
@@ -79,14 +83,23 @@ export class ProfilePictureDialogTriggerComponent {
   #dialog = inject(MatDialog);
 
   @HostListener('click') onClick() {
-    this.#dialog.open(ProfilePictureDialog);
+    this.#dialog.open(ProfilePictureDialog, {
+      autoFocus: false,
+    });
   }
 }
 
 @Component({
   selector: 'matx-profile-picture-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    ProfilePictureComponent,
+    MatDividerModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './profile-picture.dialog.html',
   styleUrls: ['./profile-picture.dialog.scss'],
 })

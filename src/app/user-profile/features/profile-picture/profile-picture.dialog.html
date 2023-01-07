@@ -1,1 +1,20 @@
-<p>profile-picture works!</p>
+<h2 mat-dialog-title>Profile Picture</h2>
+<button mat-icon-button matDialogClose class="close-button" aria-label="close">
+  <mat-icon>close</mat-icon>
+</button>
+<mat-dialog-content class="dialog-content">
+  <p>
+    A picture helps people recognize you and lets you know when you’re signed in
+    to your account
+  </p>
+  <mat-divider class="divider"></mat-divider>
+  <div class="profile-picture-container">
+    <matx-profile-picture></matx-profile-picture>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button color="primary" class="add-picture-button">
+    <mat-icon>add_a_photo</mat-icon>
+    <span>Add profile picture</span>
+  </button>
+</mat-dialog-actions>

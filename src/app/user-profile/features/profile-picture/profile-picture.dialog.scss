@@ -1,0 +1,25 @@
+:host {
+  display: block;
+  position: relative;
+  width: 400px;
+  height: 580px;
+}
+.divider {
+  margin-block-start: 24px;
+  margin-block-end: 24px;
+}
+.profile-picture-container {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  height: 288px;
+  width: 288px;
+}
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.add-picture-button {
+  width: 100%;
+}
