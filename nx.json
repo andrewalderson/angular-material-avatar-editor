@@ -59,6 +59,11 @@
     },
     "@nrwl/angular:component": {
       "style": "scss"
+    },
+    "@nrwl/angular:stories": {
+      "name": "angular-material-avatar-editor",
+      "cypressProject": "storybook-e2e",
+      "generateCypressSpecs": true
     }
   },
   "defaultProject": "angular-material-avatar-editor"
