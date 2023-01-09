@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import {
   componentWrapperDecorator,
   Meta,
@@ -6,6 +7,8 @@ import {
 } from '@storybook/angular';
 import { CropperCanvasComponent } from './cropper-canvas.component';
 import { CropperImageComponent } from './cropper-image.component';
+
+export type Cropper = CropperImageComponent;
 
 export default {
   title: 'CropperCanvasComponent',
@@ -18,17 +21,17 @@ export default {
       (story) => `<div style="width: '100vw'; height:'100vh'">${story}</div>`
     ),
   ],
-} as Meta<CropperCanvasComponent>;
+} as Meta<Cropper>;
 
-const Template: Story<CropperCanvasComponent> = (
-  args: CropperCanvasComponent
-) => ({
+const Template: Story<Cropper> = (args: Cropper) => ({
   props: args,
-  template: `<matx-cropper-canvas><matx-cropper-image></matx-cropper-image></matx-cropper-canvas>`,
+  template: `<matx-cropper-canvas><matx-cropper-image [src]="src"></matx-cropper-image></matx-cropper-canvas>`,
 });
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  src: faker.image.abstract(2345, 1234),
+};
 Primary.parameters = {
   layout: 'fullscreen',
 };
