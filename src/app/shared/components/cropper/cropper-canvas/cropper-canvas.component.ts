@@ -10,8 +10,17 @@ import {
   selector: 'matx-cropper-canvas',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './cropper-canvas.component.html',
-  styleUrls: ['./cropper-canvas.component.scss'],
+  template: `<ng-content></ng-content>`,
+  styles: [
+    `
+      .matx-cropper-canvas {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+    `,
+  ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
