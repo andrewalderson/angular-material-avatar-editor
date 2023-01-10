@@ -7,6 +7,7 @@ import {
 } from '@storybook/angular';
 import { CropperCanvasComponent } from './cropper-canvas.component';
 import { CropperImageComponent } from './cropper-image.component';
+import { CropperSelectionComponent } from './cropper-selection.component';
 
 export type Cropper = CropperImageComponent;
 
@@ -15,7 +16,7 @@ export default {
   component: CropperCanvasComponent,
   decorators: [
     moduleMetadata({
-      imports: [CropperImageComponent],
+      imports: [CropperImageComponent, CropperSelectionComponent],
     }),
     componentWrapperDecorator(
       (story) => `<div style="width: '100vw'; height:'100vh'">${story}</div>`
@@ -25,7 +26,10 @@ export default {
 
 const Template: Story<Cropper> = (args: Cropper) => ({
   props: args,
-  template: `<matx-cropper-canvas><matx-cropper-image [src]="src"></matx-cropper-image></matx-cropper-canvas>`,
+  template: `<matx-cropper-canvas>
+    <matx-cropper-image [src]="src"></matx-cropper-image>
+    <matx-cropper-selection></matx-cropper-selection>
+    </matx-cropper-canvas>`,
 });
 
 export const Primary = Template.bind({});
