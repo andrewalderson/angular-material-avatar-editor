@@ -1,3 +1,4 @@
+import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -68,8 +69,8 @@ export class CropperImageComponent {
 
   _onImageLoad(event: Event) {
     const image = event.target as HTMLImageElement;
-    this.#element.style.width = `${image.naturalWidth}px`;
-    this.#element.style.height = `${image.naturalHeight}px`;
+    this.#element.style.width = coerceCssPixelValue(image.naturalWidth);
+    this.#element.style.height = coerceCssPixelValue(image.naturalHeight);
     this.#imageVisibility = 'visible';
     this.#changeDetectorRef.markForCheck();
   }
