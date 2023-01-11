@@ -13,7 +13,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
-import { DroppableDirective } from './droppable.directive';
+import { FileDropzoneDirective } from './file-dropzone.directive';
 
 @Component({
   selector: 'matx-file-browser',
@@ -23,10 +23,10 @@ import { DroppableDirective } from './droppable.directive';
   styleUrls: ['./file-browser.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  hostDirectives: [DroppableDirective],
+  hostDirectives: [FileDropzoneDirective],
 })
 export class FileBrowserComponent implements AfterViewInit, OnDestroy {
-  #droppable = inject(DroppableDirective, { self: true });
+  #dropzone = inject(FileDropzoneDirective, { self: true });
 
   #destroyed = new Subject<void>();
 
@@ -37,7 +37,7 @@ export class FileBrowserComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.#droppable.fileDropped
+    this.#dropzone.fileDropped
       .pipe(takeUntil(this.#destroyed))
       .subscribe((file) => this.fileSelected.emit(file));
   }

@@ -2,10 +2,10 @@ import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Directive({
-  selector: '[matxDropable]',
+  selector: '[matxFileDropzone]',
   standalone: true,
 })
-export class DroppableDirective {
+export class FileDropzoneDirective {
   #elementRef: ElementRef<HTMLElement> = inject(ElementRef);
 
   readonly fileDropped = new Subject<File>();
@@ -14,13 +14,6 @@ export class DroppableDirective {
   onDragEnter() {
     this.#setDroppableClasses(true);
 
-    return false;
-  }
-
-  // The dragover and dragenter event need to have preventDefault set for the drop event to fire
-  // returning false will set this
-  @HostListener('dragover')
-  onDragOver() {
     return false;
   }
 
@@ -35,18 +28,16 @@ export class DroppableDirective {
     return false;
   }
 
-  // This will prevent the image from being opened
-  // in a new tab if the user drops the image outside the
-  // bounds of this component
   @HostListener('document:dragover', ['$event'])
   onDocumentDragOver(event: DragEvent) {
-    if (this.#isWithinClientBounds(event)) {
-      return;
-    }
-
-    if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'none';
-      event.dataTransfer.dropEffect = 'none';
+    if (!this.#isWithinClientBounds(event)) {
+      // This will prevent the image from being opened
+      // in a new tab if the user drops the image outside the
+      // bounds of this component
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'none';
+        event.dataTransfer.dropEffect = 'none';
+      }
     }
 
     return false;
