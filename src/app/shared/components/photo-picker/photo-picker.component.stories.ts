@@ -24,7 +24,7 @@ const Template: Story<PhotoPickerComponent> = (args: PhotoPickerComponent) => ({
 });
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = { multiple: false, accept: ['image/*'] };
 Primary.parameters = {
   layout: 'centered',
 };

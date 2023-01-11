@@ -1,7 +1,25 @@
+@use 'sass:color';
+@use 'sass:map';
 @use '@angular/material' as mat;
 
 @mixin color($config-or-theme) {
   $config: mat.get-color-config($config-or-theme);
+  $foreground: map.get($config, foreground);
+  $background: map.get($config, background);
+  $primary: map.get($config, 'primary');
+
+  .matx-photo-picker__dropzone-icon {
+    color: mat.get-color-from-palette($foreground, icon);
+    background-color: mat.get-color-from-palette($background, background);
+  }
+
+  .matx-photo-picker.matx-file-dropzone {
+    border-color: mat.get-color-from-palette($primary);
+    background-color: color.adjust(
+      mat.get-color-from-palette($primary),
+      $lightness: 50%
+    );
+  }
 }
 
 @mixin density($config-or-theme) {
@@ -10,6 +28,11 @@
 
 @mixin typography($config-or-theme) {
   $config: mat.get-typography-config($config-or-theme);
+  .matx-photo-picker__dropzone-title {
+    font-family: mat.font-family($config);
+    font-weight: mat.font-weight($config, 'body-1');
+    font-size: mat.font-size($config, 'headline-5');
+  }
 }
 
 @mixin theme($theme) {
