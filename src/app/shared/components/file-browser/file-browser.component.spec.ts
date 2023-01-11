@@ -1,19 +1,19 @@
 import { fireEvent, render } from '@testing-library/angular';
 
-import { LocalImageLoaderComponent } from './local-image-loader.component';
-import { Primary } from './local-image-loader.component.stories';
+import { FileBrowserComponent } from './file-browser.component';
+import { Primary } from './file-browser.component.stories';
 
-describe('LocalImageLoaderComponent', () => {
+describe('FileBrowserComponent', () => {
   it('should add a class matching the selector to the host element by default', async () => {
-    const { container } = await render(LocalImageLoaderComponent, {
+    const { container } = await render(FileBrowserComponent, {
       componentProperties: Primary.args,
     });
 
-    expect(container).toHaveClass('matx-local-image-loader');
+    expect(container).toHaveClass('matx-file-browser');
   });
 
   it('should add the droppable class on dragenter and remove it on dragleave', async () => {
-    const { container } = await render(LocalImageLoaderComponent, {
+    const { container } = await render(FileBrowserComponent, {
       componentProperties: Primary.args,
     });
 
@@ -29,7 +29,7 @@ describe('LocalImageLoaderComponent', () => {
   });
 
   it('should add the droppable class on dragenter and remove it on drop', async () => {
-    const { container } = await render(LocalImageLoaderComponent, {
+    const { container } = await render(FileBrowserComponent, {
       componentProperties: Primary.args,
     });
 
@@ -45,7 +45,7 @@ describe('LocalImageLoaderComponent', () => {
   });
 
   it('should allow drop operation on the container', async () => {
-    const { container, fixture } = await render(LocalImageLoaderComponent, {
+    const { container, fixture } = await render(FileBrowserComponent, {
       componentProperties: { ...Primary.args },
     });
 
@@ -64,7 +64,7 @@ describe('LocalImageLoaderComponent', () => {
   });
 
   it('should allow user to select file', async () => {
-    const { fixture, findByTestId } = await render(LocalImageLoaderComponent, {
+    const { fixture, findByTestId } = await render(FileBrowserComponent, {
       componentProperties: { ...Primary.args },
     });
 

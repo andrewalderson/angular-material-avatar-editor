@@ -8,12 +8,12 @@
   $background: map.get($config, background);
   $primary: map.get($config, 'primary');
 
-  .matx-local-image-loader__dropzone-icon {
+  .matx-file-browser__dropzone-icon {
     color: mat.get-color-from-palette($foreground, icon);
     background-color: mat.get-color-from-palette($background, background);
   }
 
-  .matx-local-image-loader.droppable {
+  .matx-file-browser.droppable {
     border-color: mat.get-color-from-palette($primary);
     background-color: color.adjust(
       mat.get-color-from-palette($primary),
@@ -28,7 +28,7 @@
 
 @mixin typography($config-or-theme) {
   $config: mat.get-typography-config($config-or-theme);
-  .matx-local-image-loader__dropzone-title {
+  .matx-file-browser__dropzone-title {
     font-family: mat.font-family($config);
     font-weight: mat.font-weight($config, 'body-1');
     font-size: mat.font-size($config, 'headline-5');

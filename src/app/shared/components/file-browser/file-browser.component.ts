@@ -16,16 +16,16 @@ import { Subject, takeUntil } from 'rxjs';
 import { DroppableDirective } from './droppable.directive';
 
 @Component({
-  selector: 'matx-local-image-loader',
+  selector: 'matx-file-browser',
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule],
-  templateUrl: './local-image-loader.component.html',
-  styleUrls: ['./local-image-loader.component.scss'],
+  templateUrl: './file-browser.component.html',
+  styleUrls: ['./file-browser.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [DroppableDirective],
 })
-export class LocalImageLoaderComponent implements AfterViewInit, OnDestroy {
+export class FileBrowserComponent implements AfterViewInit, OnDestroy {
   #droppable = inject(DroppableDirective, { self: true });
 
   #destroyed = new Subject<void>();
@@ -33,7 +33,7 @@ export class LocalImageLoaderComponent implements AfterViewInit, OnDestroy {
   @Output() fileSelected = new EventEmitter<File>();
 
   @HostBinding('class') get hostClasses() {
-    return 'matx-local-image-loader';
+    return 'matx-file-browser';
   }
 
   ngAfterViewInit(): void {

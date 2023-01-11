@@ -4,11 +4,11 @@ import {
   moduleMetadata,
   Story,
 } from '@storybook/angular';
-import { LocalImageLoaderComponent } from './local-image-loader.component';
+import { FileBrowserComponent } from './file-browser.component';
 
 export default {
-  title: 'LocalImageLoaderComponent',
-  component: LocalImageLoaderComponent,
+  title: 'FileBrowserComponent',
+  component: FileBrowserComponent,
   decorators: [
     moduleMetadata({
       imports: [],
@@ -17,10 +17,10 @@ export default {
       (story) => `<div style="width:'90vw';height:'90vh'">${story}</div>`
     ),
   ],
-} as Meta<LocalImageLoaderComponent>;
+} as Meta<FileBrowserComponent>;
 
-const Template: Story<LocalImageLoaderComponent> = (
-  args: LocalImageLoaderComponent
+const Template: Story<FileBrowserComponent> = (
+  args: FileBrowserComponent
 ) => ({
   props: args,
 });
