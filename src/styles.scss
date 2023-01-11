@@ -4,6 +4,7 @@
 // Plus imports for other components in your app.
 @use './app/shared/components/avatar/avatar-theme' as avatar;
 @use './app/shared/components/file-browser/file-browser-theme' as file-browser;
+@use './app/shared/components/photo-picker/photo-picker-theme' as photo-picker;
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -42,9 +43,11 @@ $angular-material-avatar-editor-theme: mat.define-light-theme(
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
+@include mat.typography-hierarchy($angular-material-avatar-editor-theme);
 @include mat.all-component-themes($angular-material-avatar-editor-theme);
 @include avatar.theme($angular-material-avatar-editor-theme);
 @include file-browser.theme($angular-material-avatar-editor-theme);
+@include photo-picker.theme($angular-material-avatar-editor-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
