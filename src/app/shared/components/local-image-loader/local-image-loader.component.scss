@@ -1,0 +1,36 @@
+.matx-local-image-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  border-width: 3px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: 8px;
+
+  &__dropzone-icon {
+    width: 128px;
+    height: 128px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 36px;
+
+    & > svg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      inset: 0px;
+    }
+  }
+
+  /** this is the '- or -' text */
+  &__dropzone-title + * {
+    margin: 8px 0px;
+  }
+}
