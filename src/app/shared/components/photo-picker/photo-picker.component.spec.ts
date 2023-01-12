@@ -1,7 +1,7 @@
 import { By } from '@angular/platform-browser';
 import { fireEvent, render } from '@testing-library/angular';
-import { FileBrowseDirective } from '../file-browser/file-browse.directive';
-import { FileDropzoneDirective } from '../file-browser/file-dropzone.directive';
+import { FileBrowserDirective } from '../file-browser/file-browser.directive';
+import { FileDragDropDirective } from '../file-drag-drop/file-drag-drop.directive';
 import { PhotoPickerComponent } from './photo-picker.component';
 
 import { Primary } from './photo-picker.component.stories';
@@ -16,47 +16,54 @@ describe('PhotoPickerComponent', () => {
   });
 
   it('should emit a filesChanged event on successful drop', async () => {
-    const { container, fixture } = await render(PhotoPickerComponent, {
-      componentProperties: Primary.args,
-    });
-    jest.spyOn(fixture.componentInstance.filesChanged, 'emit');
+    const filesChanged = jest.fn();
+    const { container } = await render(
+      `<matx-photo-picker
+        (filesChanged)="filesChanged($event)"
+      ></matx-photo-picker>`,
+      {
+        componentProperties: { ...Primary.args, filesChanged },
+        imports: [PhotoPickerComponent],
+      }
+    );
 
     const files = [
       new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' }),
     ];
-    fireEvent.drop(container, {
+    // the firstElementChild is the PhotoPickerComponent nativeElement
+    fireEvent.drop(container.firstElementChild as Element, {
       dataTransfer: {
         files: files,
       },
     });
 
-    expect(fixture.componentInstance.filesChanged.emit).toHaveBeenCalledWith(
-      files
-    );
+    expect(filesChanged).toHaveBeenCalledWith(files);
   });
 
   it('should emit a filesChange event after file selection', async () => {
-    const { fixture } = await render(PhotoPickerComponent, {
-      componentProperties: Primary.args,
-    });
-
-    const button = fixture.debugElement.query(
-      By.directive(FileBrowseDirective)
+    const filesChanged = jest.fn();
+    await render(
+      `<matx-photo-picker
+        (filesChanged)="filesChanged($event)"
+      ></matx-photo-picker>`,
+      {
+        componentProperties: { ...Primary.args, filesChanged },
+        imports: [PhotoPickerComponent],
+      }
     );
-    // the button above is type of MatButton component
-    // so we need to get the directive from its injector
-    const fileBrowse = button.injector.get(FileBrowseDirective);
+
+    // This input is inside a child component
+    // Need to replace this with a ComponentHarness
+    const inputElement = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     const files = [
       new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' }),
     ];
+    fireEvent.change(inputElement, { target: { files } });
 
-    jest.spyOn(fixture.componentInstance.filesChanged, 'emit');
-    fileBrowse.filesChanged.emit(files);
-
-    expect(fixture.componentInstance.filesChanged.emit).toHaveBeenCalledWith(
-      files
-    );
+    expect(filesChanged).toHaveBeenCalledWith(files);
   });
 
   it('should set inputs to dropzone', async () => {
@@ -66,7 +73,7 @@ describe('PhotoPickerComponent', () => {
       componentInputs: { accept, multiple },
     });
 
-    const dropzone = fixture.debugElement.injector.get(FileDropzoneDirective);
+    const dropzone = fixture.debugElement.injector.get(FileDragDropDirective);
 
     expect(dropzone.accept).toEqual(accept);
     expect(dropzone.multiple).toEqual(multiple);
@@ -80,11 +87,11 @@ describe('PhotoPickerComponent', () => {
     });
 
     const button = fixture.debugElement.query(
-      By.directive(FileBrowseDirective)
+      By.directive(FileBrowserDirective)
     );
     // the button above is type of MatButton component
     // so we need to get the directive from its injector
-    const fileBrowse = button.injector.get(FileBrowseDirective);
+    const fileBrowse = button.injector.get(FileBrowserDirective);
 
     expect(fileBrowse.accept).toEqual(accept);
     expect(fileBrowse.multiple).toEqual(multiple);

@@ -1,8 +1,10 @@
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { DOCUMENT } from '@angular/common';
 import {
   Directive,
   EventEmitter,
   HostListener,
+  inject,
   Input,
   OnDestroy,
   OnInit,
@@ -11,15 +13,14 @@ import {
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 @Directive({
-  selector: 'button[matxFileBrowse]',
+  selector: 'button[matxFileBrowser]',
   standalone: true,
 })
-export class FileBrowseDirective implements OnInit, OnDestroy {
+export class FileBrowserDirective implements OnInit, OnDestroy {
+  #document = inject(DOCUMENT);
+
   #destroyed = new Subject<void>();
 
-  get input() {
-    return this.#input;
-  }
   #input?: HTMLInputElement;
 
   @Input() accept: string[] = [];
@@ -41,11 +42,14 @@ export class FileBrowseDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.#input = this.#createInputElement();
+    // we don't need this to be appended
+    // but it makes testing easier
+    this.#document.body.append(this.#input);
 
-    fromEvent(this.#input, 'change')
+    fromEvent<Event>(this.#input, 'change')
       .pipe(takeUntil(this.#destroyed))
-      .subscribe(() => {
-        const inputFiles = this.#input?.files;
+      .subscribe((event: Event) => {
+        const inputFiles = (event.target as HTMLInputElement).files;
         if (inputFiles) {
           const files = [];
           for (let i = 0; i < inputFiles.length; i++) {
@@ -64,15 +68,18 @@ export class FileBrowseDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.#input?.remove();
     this.#destroyed.next();
     this.#destroyed.complete();
   }
 
   #createInputElement() {
-    const input = document.createElement('input');
+    const input = this.#document.createElement('input');
     input.type = 'file';
     input.multiple = this.multiple;
     input.accept = this.accept.join(',');
+    input.hidden = true;
+    input.ariaHidden = 'true';
 
     return input;
   }

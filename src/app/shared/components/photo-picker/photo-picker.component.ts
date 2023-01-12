@@ -15,21 +15,21 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject, takeUntil } from 'rxjs';
-import { FileBrowseDirective } from '../file-browser/file-browse.directive';
-import { FileDropzoneDirective } from '../file-browser/file-dropzone.directive';
+import { FileBrowserDirective } from '../file-browser/file-browser.directive';
+import { FileDragDropDirective } from '../file-drag-drop/file-drag-drop.directive';
 
 @Component({
   selector: 'matx-photo-picker',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, FileBrowseDirective],
+  imports: [CommonModule, MatButtonModule, MatIconModule, FileBrowserDirective],
   templateUrl: './photo-picker.component.html',
   styleUrls: ['./photo-picker.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  hostDirectives: [FileDropzoneDirective],
+  hostDirectives: [FileDragDropDirective],
 })
 export class PhotoPickerComponent implements AfterViewInit, OnDestroy {
-  #dropzone = inject(FileDropzoneDirective, { self: true });
+  #dragdrop = inject(FileDragDropDirective, { self: true });
 
   #destroyed = new Subject<void>();
 
@@ -39,8 +39,8 @@ export class PhotoPickerComponent implements AfterViewInit, OnDestroy {
   }
   set accept(value: string[]) {
     this.#accept = value;
-    if (this.#dropzone) {
-      this.#dropzone.accept = this.accept;
+    if (this.#dragdrop) {
+      this.#dragdrop.accept = this.accept;
     }
   }
   #accept: string[] = ['image/*'];
@@ -51,22 +51,22 @@ export class PhotoPickerComponent implements AfterViewInit, OnDestroy {
   }
   set multiple(value: BooleanInput) {
     this.#multiple = coerceBooleanProperty(value);
-    if (this.#dropzone) {
-      this.#dropzone.multiple = this.multiple;
+    if (this.#dragdrop) {
+      this.#dragdrop.multiple = this.multiple;
     }
   }
   #multiple = false;
 
-  @Output() readonly filesChanged = new EventEmitter<File[]>();
+  @Output() filesChanged = new EventEmitter<File[]>();
 
   @HostBinding('class') get hostClasses() {
     return 'matx-photo-picker';
   }
 
   ngAfterViewInit(): void {
-    this.#dropzone.accept = this.accept;
-    this.#dropzone.multiple = this.multiple;
-    this.#dropzone.filesDropped
+    this.#dragdrop.accept = this.accept;
+    this.#dragdrop.multiple = this.multiple;
+    this.#dragdrop.filesDropped
       .pipe(takeUntil(this.#destroyed))
       .subscribe((files) => {
         this.filesChanged.emit(files);

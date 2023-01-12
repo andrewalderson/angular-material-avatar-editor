@@ -10,39 +10,44 @@ import {
 } from '@angular/core';
 import { fireEvent, render } from '@testing-library/angular';
 import { Subject, takeUntil } from 'rxjs';
-import { FileDropzoneDirective } from './file-dropzone.directive';
+import { FileDragDropDirective } from './file-drag-drop.directive';
 
-describe('FileDropzoneDirective', () => {
-  it('should add the matx-file-dropzone class on dragenter and remove it on dragleave', async () => {
-    const { container } = await render(FileDropzoneHostComponent);
+describe('FileDragDropDirective', () => {
+  it('should add a class matching the selector to the host element by default', async () => {
+    const { container } = await render(FileDragDropHostComponent);
 
-    expect(container).not.toHaveClass('matx-file-dropzone');
+    expect(container).toHaveClass('matx-file-drag-drop');
+  });
+  it('should add the active class on dragenter and remove it on dragleave', async () => {
+    const { container } = await render(FileDragDropHostComponent);
+
+    expect(container).not.toHaveClass('matx-file-drag-drop--active');
 
     fireEvent.dragEnter(container);
 
-    expect(container).toHaveClass('matx-file-dropzone');
+    expect(container).toHaveClass('matx-file-drag-drop--active');
 
     fireEvent.dragLeave(container);
 
-    expect(container).not.toHaveClass('matx-file-dropzone');
+    expect(container).not.toHaveClass('matx-file-drag-drop--active');
   });
 
-  it('should add the matx-file-dropzone class on dragenter and remove it on drop', async () => {
-    const { container } = await render(FileDropzoneHostComponent);
+  it('should add the active class on dragenter and remove it on drop', async () => {
+    const { container } = await render(FileDragDropHostComponent);
 
-    expect(container).not.toHaveClass('matx-file-dropzone');
+    expect(container).not.toHaveClass('matx-file-drag-drop--active');
 
     fireEvent.dragEnter(container);
 
-    expect(container).toHaveClass('matx-file-dropzone');
+    expect(container).toHaveClass('matx-file-drag-drop--active');
 
     fireEvent.drop(container);
 
-    expect(container).not.toHaveClass('matx-file-dropzone');
+    expect(container).not.toHaveClass('matx-file-drag-drop--active');
   });
 
   it('should emit single file on a drop operation when multipel is false', async () => {
-    const { container, fixture } = await render(FileDropzoneHostComponent, {
+    const { container, fixture } = await render(FileDragDropHostComponent, {
       componentInputs: {
         multiple: false,
       },
@@ -66,7 +71,7 @@ describe('FileDropzoneDirective', () => {
   });
 
   it('should emit multiple files on a drop operations when multiple is true', async () => {
-    const { container, fixture } = await render(FileDropzoneHostComponent, {
+    const { container, fixture } = await render(FileDragDropHostComponent, {
       componentInputs: {
         multiple: true,
       },
@@ -90,7 +95,7 @@ describe('FileDropzoneDirective', () => {
   });
 
   it('should not emit files when they are of the wrong type', async () => {
-    const { container, fixture } = await render(FileDropzoneHostComponent, {
+    const { container, fixture } = await render(FileDragDropHostComponent, {
       componentInputs: {
         multiple: false,
         accept: ['application/pdf'],
@@ -114,13 +119,13 @@ describe('FileDropzoneDirective', () => {
 });
 
 @Component({
-  selector: 'matx-file-dropzone-host',
+  selector: 'matx-file-droag-drop-host',
   template: '',
   standalone: true,
-  hostDirectives: [FileDropzoneDirective],
+  hostDirectives: [FileDragDropDirective],
 })
-class FileDropzoneHostComponent implements AfterViewInit, OnDestroy {
-  #dropzone = inject(FileDropzoneDirective, { self: true });
+class FileDragDropHostComponent implements AfterViewInit, OnDestroy {
+  #dragdrop = inject(FileDragDropDirective, { self: true });
 
   #destroyed = new Subject<void>();
 
@@ -130,8 +135,8 @@ class FileDropzoneHostComponent implements AfterViewInit, OnDestroy {
   }
   set accept(value: string[]) {
     this.#accept = value;
-    if (this.#dropzone) {
-      this.#dropzone.accept = this.accept;
+    if (this.#dragdrop) {
+      this.#dragdrop.accept = this.accept;
     }
   }
   #accept: string[] = [];
@@ -142,8 +147,8 @@ class FileDropzoneHostComponent implements AfterViewInit, OnDestroy {
   }
   set multiple(value: BooleanInput) {
     this.#multiple = coerceBooleanProperty(value);
-    if (this.#dropzone) {
-      this.#dropzone.multiple = this.multiple;
+    if (this.#dragdrop) {
+      this.#dragdrop.multiple = this.multiple;
     }
   }
   #multiple = false;
@@ -151,9 +156,9 @@ class FileDropzoneHostComponent implements AfterViewInit, OnDestroy {
   @Output() filesChanged = new EventEmitter<File[]>();
 
   ngAfterViewInit(): void {
-    this.#dropzone.accept = this.accept;
-    this.#dropzone.multiple = this.multiple;
-    this.#dropzone.filesDropped
+    this.#dragdrop.accept = this.accept;
+    this.#dragdrop.multiple = this.multiple;
+    this.#dragdrop.filesDropped
       .pipe(takeUntil(this.#destroyed))
       .subscribe((files) => {
         this.filesChanged.emit(files);

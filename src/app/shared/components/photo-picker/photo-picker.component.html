@@ -1,4 +1,4 @@
-<div class="matx-photo-picker__dropzone-icon">
+<div class="matx-photo-picker__drag-drop-icon">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 128 128"
@@ -14,12 +14,12 @@
     />
   </svg>
 </div>
-<div class="matx-photo-picker__dropzone-title">Drag photo here</div>
+<div class="matx-photo-picker__drag-drop-title">Drag photo here</div>
 <div aria-hidden="true">- or -</div>
 <button
   mat-stroked-button
   color="primary"
-  matxFileBrowse
+  matxFileBrowser
   [accept]="accept"
   [multiple]="multiple"
   (filesChanged)="_onFilesChanged($event)"

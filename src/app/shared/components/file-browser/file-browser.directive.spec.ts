@@ -1,14 +1,15 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { fireEvent, render } from '@testing-library/angular';
-import { FileBrowseDirective } from './file-browse.directive';
+import { FileBrowserDirective } from './file-browser.directive';
 
-describe('FileBrowseDirective', () => {
+describe('FileBrowserDirective', () => {
   it('should forward button clicks to the file input', async () => {
-    const { fixture, findByRole } = await render(FileBrowseHostComponent);
+    const { findByRole } = await render(FileBrowseHostComponent);
 
     const buttonElement = await findByRole('button');
-    const inputElement = fixture.componentInstance.fileBrowse
-      ?.input as HTMLInputElement;
+    const inputElement = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     const inputClickFn = jest.fn();
 
@@ -19,16 +20,17 @@ describe('FileBrowseDirective', () => {
     expect(inputClickFn).toHaveBeenCalled();
   });
 
-  it('should set the properties on teh input element', async () => {
+  it('should set the properties on the input element', async () => {
     const multiple = true;
     const accept = ['image/jpeg', 'image/png'];
 
-    const { fixture } = await render(FileBrowseHostComponent, {
+    await render(FileBrowseHostComponent, {
       componentInputs: { multiple, accept },
     });
 
-    const inputElement = fixture.componentInstance.fileBrowse
-      ?.input as HTMLInputElement;
+    const inputElement = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     expect(inputElement.type).toEqual('file');
     expect(inputElement.accept).toEqual(accept.join(','));
@@ -40,8 +42,9 @@ describe('FileBrowseDirective', () => {
       componentInputs: { multiple: false },
     });
 
-    const inputElement = fixture.componentInstance.fileBrowse
-      ?.input as HTMLInputElement;
+    const inputElement = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     const files = [
       new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' }),
@@ -59,8 +62,9 @@ describe('FileBrowseDirective', () => {
       componentInputs: { multiple: true },
     });
 
-    const inputElement = fixture.componentInstance.fileBrowse
-      ?.input as HTMLInputElement;
+    const inputElement = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
 
     const files = [
       new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' }),
@@ -75,18 +79,18 @@ describe('FileBrowseDirective', () => {
 });
 
 @Component({
-  selector: 'matx-file-browse-host',
+  selector: 'matx-file-browser-host',
   template: `<button
-    matxFileBrowse
+    matxFileBrowser
     [accept]="accept"
     [multiple]="multiple"
     (filesChanged)="onFilesChanged($event)"
   ></button>`,
-  imports: [FileBrowseDirective],
+  imports: [FileBrowserDirective],
   standalone: true,
 })
 class FileBrowseHostComponent {
-  @ViewChild(FileBrowseDirective) fileBrowse?: FileBrowseDirective;
+  @ViewChild(FileBrowserDirective) fileBrowse?: FileBrowserDirective;
 
   @Input() accept: string[] = [];
 

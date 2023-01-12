@@ -3,16 +3,17 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  HostBinding,
   HostListener,
   inject,
   Input,
   Output,
 } from '@angular/core';
 @Directive({
-  selector: '[matxFileDropzone]',
+  selector: '[matxFileDragDrop]',
   standalone: true,
 })
-export class FileDropzoneDirective {
+export class FileDragDropDirective {
   #elementRef: ElementRef<HTMLElement> = inject(ElementRef);
 
   @Output()
@@ -29,17 +30,21 @@ export class FileDropzoneDirective {
   }
   #multiple = false;
 
+  @HostBinding('class') get hostClasses() {
+    return 'matx-file-drag-drop';
+  }
+
   @HostListener('dragenter')
   onDragEnter() {
-    this.#setDroppableClasses(true);
+    this.#setActiveClasses(true);
 
     return false;
   }
 
   @HostListener('dragleave', ['$event'])
   onDragLeave(event: DragEvent) {
-    if (!this.#isWithinClientBounds(event)) {
-      this.#setDroppableClasses(false);
+    if (!this.#isMouseInsideClientBounds(event)) {
+      this.#setActiveClasses(false);
     }
 
     return false;
@@ -47,7 +52,7 @@ export class FileDropzoneDirective {
 
   @HostListener('document:dragover', ['$event'])
   onDocumentDragOver(event: DragEvent) {
-    if (!this.#isWithinClientBounds(event)) {
+    if (!this.#isMouseInsideClientBounds(event)) {
       // This will prevent the image from being opened
       // in a new tab if the user drops the image outside the
       // bounds of this component
@@ -62,7 +67,7 @@ export class FileDropzoneDirective {
 
   @HostListener('drop', ['$event'])
   onDrop(event: DragEvent) {
-    this.#setDroppableClasses(false);
+    this.#setActiveClasses(false);
     const inputFiles = event.dataTransfer?.files;
     if (inputFiles) {
       const files = [];
@@ -93,25 +98,39 @@ export class FileDropzoneDirective {
     });
   }
 
-  #setDroppableClasses(add: boolean) {
+  #setActiveClasses(add: boolean) {
     if (add) {
       if (
-        !this.#elementRef.nativeElement.classList.contains('matx-file-dropzone')
+        !this.#elementRef.nativeElement.classList.contains(
+          'matx-file-drag-drop--active'
+        )
       ) {
-        this.#elementRef.nativeElement.classList.add('matx-file-dropzone');
+        this.#elementRef.nativeElement.classList.add(
+          'matx-file-drag-drop--active'
+        );
       }
     } else {
-      this.#elementRef.nativeElement.classList.remove('matx-file-dropzone');
+      this.#elementRef.nativeElement.classList.remove(
+        'matx-file-drag-drop--active'
+      );
     }
   }
 
-  #isWithinClientBounds(event: MouseEvent) {
+  #isMouseInsideClientBounds(event: MouseEvent) {
+    const { clientX, clientY } = event;
+    // not sure if doing this constantly is a good idea
+    // calling 'getBoundingClientRect' causes a layout cycle
+    // This doesn't seem to be a problem because the browser has probably optimized this
+    // TODO - investigate using a ResizeObserver and getting the client rectangle only
+    // on resize and cache it
     const rect = this.#elementRef.nativeElement.getBoundingClientRect();
-    return (
-      event.clientX >= rect.left &&
-      event.clientX <= rect.right &&
-      event.clientY >= rect.top &&
-      event.clientY <= rect.bottom
-    );
+
+    return this.#isPointInsideRectangle(rect, clientX, clientY);
+  }
+
+  #isPointInsideRectangle(rect: DOMRect, x: number, y: number) {
+    const { top, bottom, left, right } = rect;
+
+    return x >= left && x <= right && y >= top && y <= bottom;
   }
 }

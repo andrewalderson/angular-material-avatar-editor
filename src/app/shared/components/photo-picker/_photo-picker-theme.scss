@@ -8,12 +8,19 @@
   $background: map.get($config, background);
   $primary: map.get($config, 'primary');
 
-  .matx-photo-picker__dropzone-icon {
-    color: mat.get-color-from-palette($foreground, icon);
-    background-color: mat.get-color-from-palette($background, background);
+  .matx-photo-picker {
+    color: mat.get-color-from-palette($foreground, text);
   }
 
-  .matx-photo-picker.matx-file-dropzone {
+  .matx-photo-picker__drag-drop-icon {
+    color: color.adjust(mat.get-color-from-palette($primary), $lightness: 70%);
+    background-color: color.adjust(
+      mat.get-color-from-palette($primary),
+      $lightness: 40%
+    );
+  }
+
+  .matx-photo-picker.matx-file-drag-drop--active {
     border-color: mat.get-color-from-palette($primary);
     background-color: color.adjust(
       mat.get-color-from-palette($primary),
@@ -28,7 +35,7 @@
 
 @mixin typography($config-or-theme) {
   $config: mat.get-typography-config($config-or-theme);
-  .matx-photo-picker__dropzone-title {
+  .matx-photo-picker__drag-drop-title {
     font-family: mat.font-family($config);
     font-weight: mat.font-weight($config, 'body-1');
     font-size: mat.font-size($config, 'headline-5');
