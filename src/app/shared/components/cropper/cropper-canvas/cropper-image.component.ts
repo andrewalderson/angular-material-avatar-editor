@@ -10,6 +10,7 @@ import {
   Input,
   ViewEncapsulation,
 } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'matx-cropper-image',
@@ -47,12 +48,12 @@ export class CropperImageComponent {
   get src() {
     return this.#src;
   }
-  set src(value: string | undefined) {
+  set src(value: SafeUrl | undefined) {
     this.#src = value;
     this.#imageVisibility = 'hidden';
     this.#changeDetectorRef.markForCheck();
   }
-  #src?: string;
+  #src?: SafeUrl;
 
   get imageVisibility() {
     return this.#imageVisibility;
